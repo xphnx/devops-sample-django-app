@@ -1,0 +1,41 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:13
+    environment:
+      POSTGRES_USER: "worker"
+      POSTGRES_PASSWORD: "worker"
+      POSTGRES_DB: "app"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - app-network
+
+  web:
+    build:
+      context: .
+    command: >
+      sh -c "python manage.py migrate &&
+             python manage.py runserver 0.0.0.0:8000"
+    volumes:
+      - .:/app
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+    environment:
+      DJANGO_DEBUG: "False"
+      DJANGO_DB_NAME: "app"
+      DJANGO_DB_USER: "worker"
+      DJANGO_DB_PASSWORD: "worker"
+      DJANGO_DB_HOST: "db"
+      DJANGO_DB_PORT: 5432
+    networks:
+      - app-network
+
+networks:
+  app-network:
+
+volumes:
+  postgres_data:
