@@ -8,3 +8,18 @@
 Sample Python application on Django with PostgreSQL database.
 
 
+
+<h3>Requirements</h3>
+
+____
+
+
+- Docker
+
+<h3>Deployment</h3>
+
+____
+
+
+
+- docker compose up --build
